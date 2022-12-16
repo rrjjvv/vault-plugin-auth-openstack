@@ -67,6 +67,9 @@ func (at *Attestor) Attest(instance *servers.Server, role *Role, addr string) er
 
 // AttestMetadata is used to attest a OpenStack instance metadata.
 func (at *Attestor) AttestMetadata(instance *servers.Server, metadataKey string, roleName string) error {
+	if metadataKey == "" {
+		return nil
+	}
 	val, ok := instance.Metadata[metadataKey]
 	if !ok {
 		return errors.New("metadata key not found")
