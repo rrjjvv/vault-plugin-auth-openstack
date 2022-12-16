@@ -3,6 +3,7 @@ package plugin
 import (
 	"context"
 	"errors"
+	"strings"
 	"time"
 
 	"github.com/gophercloud/gophercloud/openstack/compute/v2/servers"
@@ -91,6 +92,7 @@ func (at *Attestor) AttestStatus(instance *servers.Server) error {
 // with source IP address. This method support IPv4 only.
 func (at *Attestor) AttestAddr(instance *servers.Server, addr string) error {
 	var addresses map[string][]address
+	var checked = []string{instance.AccessIPv4}
 
 	if instance.AccessIPv4 == addr {
 		return nil
@@ -103,6 +105,7 @@ func (at *Attestor) AttestAddr(instance *servers.Server, addr string) error {
 
 	for _, addrs := range addresses {
 		for _, val := range addrs {
+			checked = append(checked, val.Address)
 			if val.Version != 4 {
 				continue
 			}
@@ -113,7 +116,7 @@ func (at *Attestor) AttestAddr(instance *servers.Server, addr string) error {
 		}
 	}
 
-	return errors.New("address mismatched")
+	return errors.New("address mismatched; checked " + addr + " against " + strings.Join(checked, ","))
 }
 
 // AttestTenantID is used to attest the tenant ID of OpenStack instance.
