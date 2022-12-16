@@ -25,10 +25,6 @@ type Role struct {
 func (r *Role) Validate(sys logical.SystemView) (warnings []string, err error) {
 	warnings = []string{}
 
-	if r.MetadataKey == "" {
-		return warnings, errors.New("metadata_key cannot be empty")
-	}
-
 	if r.AuthPeriod < time.Duration(0) {
 		return warnings, errors.New("auth_period cannot be negative")
 	}
