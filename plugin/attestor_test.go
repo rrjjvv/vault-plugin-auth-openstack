@@ -68,7 +68,7 @@ func TestAttest(t *testing.T) {
 		instance.Metadata["vault-role"] = test.metadata
 		instance.Status = test.status
 		instance.TenantID = test.tenantID
-		instance.Created = time.Now().Add(time.Duration(test.diff) * time.Second)
+		instance.Updated = time.Now().Add(time.Duration(test.diff) * time.Second)
 
 		for i := 0; i < test.attempt; i++ {
 			err = attestor.Attest(instance, role, "192.168.1.1")
@@ -234,7 +234,7 @@ func TestVerifyAuthPeriod(t *testing.T) {
 
 	for _, test := range tests {
 		instance := newTestInstance()
-		instance.Created = time.Now().Add(time.Duration(test.diff) * time.Second)
+		instance.Updated = time.Now().Add(time.Duration(test.diff) * time.Second)
 		period := time.Duration(test.period) * time.Second
 
 		_, err := attestor.VerifyAuthPeriod(instance, period)

@@ -143,10 +143,10 @@ func (at *Attestor) AttestUserID(instance *servers.Server, userID string) error 
 }
 
 // VerifyAuthPeriod is used to verify the deadline of authentication.
-// The deadline is calculated by the create date of OpenStack instance and
+// The deadline is calculated by the updated date of OpenStack instance and
 // the authentication period specified by a binded role.
 func (at *Attestor) VerifyAuthPeriod(instance *servers.Server, period time.Duration) (time.Time, error) {
-	deadline := instance.Created.Add(period)
+	deadline := instance.Updated.Add(period)
 	if time.Now().After(deadline) {
 		return deadline, errors.New("authentication deadline exceeded")
 	}
